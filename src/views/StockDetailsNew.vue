@@ -8,7 +8,7 @@
             <span class="font-bold white-space-nowrap">ของสด</span>
           </div>
         </template>
-        <DataTable :value="freshFoods" :responsiveLayout="responsiveMode" >
+        <DataTable :value="freshFoods" :responsiveLayout="responsiveMode" :scrollable="responsiveMode === 'scroll'">
           <Column field="name" header="ชื่อสินค้า">
             <template #body="{ data, field }">
               <span class="font-bold" >{{ data[field] }}</span>
@@ -105,7 +105,7 @@
             <span class="font-bold white-space-nowrap">ผัก</span>
           </div>
         </template>
-        <DataTable :value="vegetables" :responsiveLayout="responsiveMode">
+        <DataTable :value="vegetables" :responsiveLayout="responsiveMode" :scrollable="responsiveMode === 'scroll'">
           <Column field="name" header="ชื่อสินค้า">
             <template #body="{ data, field }">
               <span class="font-bold" >{{ data[field] }}</span>
@@ -250,7 +250,7 @@
       class="btn-size-cancel mr-2"
     />
     <Button
-      v-if="this.id"
+      v-if="this.statusStock == 'created'"
       icon="pi pi-send"
       severity="success"
       @click="sendLine()"
@@ -300,7 +300,8 @@ export default {
       vegetables: [],
       notes:'',
       unit: [],
-      responsiveMode: 'stack'
+      responsiveMode: 'stack',
+      statusStock:null
     };
   },
   methods: {
@@ -379,13 +380,17 @@ export default {
     cancel() {
       this.$router.push("/");
     },
-    async getDataId() {
+    getDataId() {
       if (this.id !== undefined) {
-        this.responsiveMode = 'scroll';
-        await axios
+          axios
           .get(`${import.meta.env.VITE_API_URL}/stocks/` + this.id)
           .then((response) => {
             const products = response.data.products;
+            this.responsiveMode = response.data.status;
+            console.log('response.data.status', response.data.status)
+          //   this.responsiveMode = this.statusStock === 'broadcasts' ? 'scroll' :'stack';
+            this.disabledAllField = this.statusStock == 'broadcasts' ? true :  false;
+          console.log(' this.responsiveMode', this.responsiveMode)
             const freshFoodValue = products.filter(
               (element) => element.category == "FF"
             );
@@ -399,11 +404,8 @@ export default {
           .catch((error) => {
             console.log("error :", error);
           });
-        this.disabledAllField = true;
-      } else {
-        this.responsiveMode = 'stack';
-        this.disabledAllField = false;
-      }
+
+      } 
     },
     async getUnits() {
       await axios
