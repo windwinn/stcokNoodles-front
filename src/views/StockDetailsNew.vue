@@ -371,6 +371,7 @@ export default {
                   "เกิดข้อผิดพลาด:",
                   error.response?.data || error.message
                 );
+                this.alertMessage("ติดต่อผู้ที่ดูแลระบบ", "warning");
               });
           }
         });
@@ -398,6 +399,7 @@ export default {
           })
           .catch((error) => {
             console.log("error :", error);
+            this.alertMessage("ติดต่อผู้ที่ดูแลระบบ", "warning");
           });
         this.disabledAllField = true;
       } else {
@@ -413,6 +415,7 @@ export default {
         })
         .catch((error) => {
           console.log("error :", error);
+          this.alertMessage("ติดต่อผู้ที่ดูแลระบบ", "warning");
         });
     },
     getMasterDataCMS(){
@@ -425,10 +428,17 @@ export default {
             const vegetableValue = products.filter(
               (element) => element.category == "VT"
             );
-            this.freshFoods = freshFoodValue;
-            this.vegetables = vegetableValue;
+            this.freshFoods = freshFoodValue.map(element => ({
+              ...element,
+              order: parseInt(element.order, 10)
+            }));
+            this.vegetables = vegetableValue.map(element => ({
+              ...element,
+              order: parseInt(element.order, 10)
+            }));
           }) .catch(error => {
             console.log("error : ", error);
+            this.alertMessage("ติดต่อผู้ที่ดูแลระบบ", "warning");
           })
     },
     sendLine() {
@@ -450,6 +460,7 @@ export default {
             })
             .catch((error) => {
               console.log("error :", error);
+              this.alertMessage("ติดต่อผู้ที่ดูแลระบบ", "warning");
             });
         }
       });
