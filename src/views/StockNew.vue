@@ -66,6 +66,7 @@ data() {
               this.worklistStock = response.data
           }) .catch(error => {
             console.log("error : ", error);
+            this.alertMessage("ติดต่อผู้ที่ดูแลระบบ", "warning");
           })
       }
   },created(){

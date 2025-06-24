@@ -184,14 +184,14 @@ export default {
         }
     },
     updateCMSStock(){
-            console.log("typeDialog "+this.typeDialog)
-            console.log("/master-products/"+this.idDialog)
-            console.log("name",this.nameDialog)
-            console.log("category",this.categoryDialog)
-            console.log("remain_unit",this.remainUnitDialog)
-            console.log("order_unit",this.orderUnitDialog)
-            console.log("note"," ")
-            console.log("visible_item",this.visibleItem)
+            // console.log("typeDialog "+this.typeDialog)
+            // console.log("/master-products/"+this.idDialog)
+            // console.log("name",this.nameDialog)
+            // console.log("category",this.categoryDialog)
+            // console.log("remain_unit",this.remainUnitDialog)
+            // console.log("order_unit",this.orderUnitDialog)
+            // console.log("note"," ")
+            // console.log("visible_item",this.visibleItem)
         if(this.nameDialog == null || this.nameDialog == ''){
             this.alertMessage("กรุณากรอกชื่อสินค้า ","warning");
         }else if(this.categoryDialog == null || this.categoryDialog == ''){
@@ -208,7 +208,9 @@ export default {
               .put(`${import.meta.env.VITE_API_URL}/master-products/`+this.idDialog, {
                 name: this.nameDialog,
                 category: this.categoryDialog,
+                remain: null,
                 remain_unit: this.remainUnitDialog,
+                order:"0",
                 order_unit: this.orderUnitDialog,
                 note: "",
                 visible_item: this.visibleItem
@@ -223,13 +225,16 @@ export default {
                   "เกิดข้อผิดพลาด:",
                   error.response?.data || error.message
                 );
+                this.alertMessage("ติดต่อผู้ที่ดูแลระบบ", "warning");
               });
         }else{
              axios
               .post(`${import.meta.env.VITE_API_URL}/master-products/`,{
                 name: this.nameDialog,
                 category: this.categoryDialog,
+                remain: null,
                 remain_unit: this.remainUnitDialog,
+                order: "0",
                 order_unit: this.orderUnitDialog,
                 note: "",
                 visible_item: this.visibleItem
@@ -244,6 +249,7 @@ export default {
                   "เกิดข้อผิดพลาด:",
                   error.response?.data || error.message
                 );
+                this.alertMessage("ติดต่อผู้ที่ดูแลระบบ", "warning");
               });
         }
     },
@@ -262,6 +268,7 @@ export default {
               this.cmsStock = response.data
           }) .catch(error => {
             console.log("error : ", error);
+            this.alertMessage("ติดต่อผู้ที่ดูแลระบบ", "warning");
           })
       },
     async getUnits() {
@@ -272,6 +279,7 @@ export default {
     })
     .catch((error) => {
         console.log("error :", error);
+        this.alertMessage("ติดต่อผู้ที่ดูแลระบบ", "warning");
     });
     },
   },created(){
