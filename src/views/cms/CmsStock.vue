@@ -4,15 +4,21 @@
                   :sortOrder="-1" :globalFilterFields="['name']" paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                   currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
           <template #header>
+            <div class="flex justify-content-between">
+                <div class="flex align-items-center">
+                    <Avatar image="/assets/icon/packages.png"/>
+                    <span class="font-bold white-space-nowrap ml-2">จัดการสินค้า</span>
+                </div>
               <div class="flex justify-content-end">
-                  <div class="mr-3">
-                      <Button @click="openDialog(null,'add')" class="p-refresh" label="เพิ่ม" severity="danger" icon="pi pi-plus" />
+                  <div class="mr-2">
+                      <Button @click="newDetails()" class="p-refresh" label="เพิ่ม" severity="danger" icon="pi pi-plus" />
                   </div>
                   <span class="p-input-icon-left">
                       <i class="pi pi-search" />
                       <InputText v-model="filters['global'].value" placeholder="ค้นหา" />
                   </span>
               </div>
+            </div>
           </template>
             <Column style="width:10px">
                 <template #body="slotProps">

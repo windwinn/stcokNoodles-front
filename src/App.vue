@@ -3,7 +3,7 @@
     <div class="card relative z-2">
       <Menubar :model="menus" >
         <template #start>
-          <img alt="logo" src="/assets/icon/yeeLogo.png" height="30" class="mr-2" />
+          <img alt="logo" src="/assets/icon/checklist1.png" height="30" class="mr-1" />
         </template>
       </Menubar>
 
