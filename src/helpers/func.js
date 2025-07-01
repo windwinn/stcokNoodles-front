@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import loading from '/assets/icon/loading.gif'
 
 export default {
 
@@ -9,7 +10,7 @@ export default {
       // title: type,
       // text: message,
       confirmButtonColor: '#607D8B',
-      target: document.body, // ให้แน่ใจว่าอยู่เหนือ dialog อื่น ๆ
+      target: document.body, 
       didOpen: () => {
         document.querySelector('.swal2-popup').style.zIndex = '9999';
       }
@@ -44,5 +45,18 @@ export default {
       formatValue = 'ส่งข้อมูลแล้ว'
     }
     return formatValue 
-  }
+  },
+  show() {
+    this.$swal({ 
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        imageUrl: loading,
+        background: 'rgb(255 255 255 / 0%)'
+    })
+  },
+  close() {
+    setTimeout(() => {
+      this.$swal.close()
+    }, 500)
+  },
 };

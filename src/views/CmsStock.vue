@@ -171,6 +171,8 @@ export default {
     formatCategory: func.formatCategory,
     formatVisibleItem: func.formatVisibleItem,
     alertMessage: func.alertMessage,
+    show: func.show,
+    close: func.close,
     openDialog(e,type){
         this.visibleCMS = true
         this.typeDialog = type
@@ -204,6 +206,7 @@ export default {
             this.alertMessage("กรุณาเลือกประเภทหน่วย (สั่งเพิ่ม) ","warning");
             return;
         }else if(this.typeDialog == 'edit'){
+            this.show()
             axios
               .put(`${import.meta.env.VITE_API_URL}/master-products/`+this.idDialog, {
                 name: this.nameDialog,
@@ -228,6 +231,7 @@ export default {
                 this.alertMessage("ติดต่อผู้ที่ดูแลระบบ", "warning");
               });
         }else{
+            this.show()
              axios
               .post(`${import.meta.env.VITE_API_URL}/master-products/`,{
                 name: this.nameDialog,
@@ -263,24 +267,28 @@ export default {
         this.visibleItem = null
     },
     getCMSStock(){
+        this.show()
         axios.get(`${import.meta.env.VITE_API_URL}/master-products-all/`)
           .then(response => {
               this.cmsStock = response.data
+              this.close()
           }) .catch(error => {
             console.log("error : ", error);
             this.alertMessage("ติดต่อผู้ที่ดูแลระบบ", "warning");
           })
       },
     async getUnits() {
-    await axios
-    .get(`${import.meta.env.VITE_API_URL}/stocksUnit`)
-    .then((response) => {
-        this.unit = response.data;
-    })
-    .catch((error) => {
-        console.log("error :", error);
-        this.alertMessage("ติดต่อผู้ที่ดูแลระบบ", "warning");
-    });
+        this.show()
+        await axios
+        .get(`${import.meta.env.VITE_API_URL}/stocksUnit`)
+        .then((response) => {
+            this.unit = response.data;
+            this.close()
+        })
+        .catch((error) => {
+            console.log("error :", error);
+            this.alertMessage("ติดต่อผู้ที่ดูแลระบบ", "warning");
+        });
     },
   },created(){
     this.getCMSStock()

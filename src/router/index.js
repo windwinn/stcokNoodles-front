@@ -1,16 +1,24 @@
 import { createRouter,createWebHistory } from 'vue-router'
 
-import stockNew from '../views/StockNew.vue'
-import stockDetailsNew from '../views/StockDetailsNew.vue'
+import StockWorklists from '../views/StockWorklists.vue'
+import StockDetailsFresh from '../views/StockDetailsFresh.vue'
+import StockDetailsVetgetable from '../views/StockDetailsVetgetable.vue'
 import cmsStock from '../views/CmsStock.vue'
 
 const routes = [
-    { path: '/',  name:'stockNew', component: stockNew },
-    { path: '/stockDetailsNew', name: 'stockDetailNew',component: stockDetailsNew },
+    { path: '/',  name:'StockWorklists', component: StockWorklists },
+    { path: '/StockDetailsFresh', name: 'StockDetailsFreshs',component: StockDetailsFresh },
     {
-      path: '/stockDetailsNew/:stockId',
-      name: 'stockDetailsNew',
-      component: stockDetailsNew,
+      path: '/StockDetailsFresh/:stockId',
+      name: 'StockDetailsFresh',
+      component: StockDetailsFresh,
+      props: true,
+    },
+    { path: '/StockDetailsVetgetable', name: 'StockDetailsVetgetables',component: StockDetailsVetgetable },
+    {
+      path: '/StockDetailsVetgetable/:stockId',
+      name: 'StockDetailsVetgetable',
+      component: StockDetailsVetgetable,
       props: true,
     },
     { path: '/cmsStock', name: 'cmsStock',component: cmsStock },

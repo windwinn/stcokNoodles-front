@@ -54,16 +54,21 @@ data() {
   methods: {
      formatDate: func.formatDate,
      formatStatus: func.formatStatus,
+     alertMessage: func.alertMessage,
+     show: func.show,
+     close: func.close,
       newDetails(){
-        this.$router.push({ path: `/stockDetailsNew`});
+        this.$router.push({ path: `/StockDetailsFresh`});
       },
       goDetails(data){
-          this.$router.push({ path: `/stockDetailsNew/${data.id}`});
+          this.$router.push({ path: `/StockDetailsFresh/${data.id}`});
       },
       getWorklistStock(){
+        this.show()
         axios.get(`${import.meta.env.VITE_API_URL}/stocks/`)
           .then(response => {
               this.worklistStock = response.data
+              this.close()
           }) .catch(error => {
             console.log("error : ", error);
             this.alertMessage("ติดต่อผู้ที่ดูแลระบบ", "warning");

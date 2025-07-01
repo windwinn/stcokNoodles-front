@@ -8,7 +8,7 @@
             <span class="font-bold white-space-nowrap">ของสด</span>
           </div>
         </template>
-        <DataTable :value="freshFoods" :responsiveLayout="responsiveMode" :scrollable="responsiveMode === 'scroll'">
+        <DataTable :value="freshFoods" :responsiveLayout="responsiveMode">
           <Column field="name" header="ชื่อสินค้า">
             <template #body="{ data, field }">
               <span class="font-bold" >{{ data[field] }}</span>
@@ -24,6 +24,7 @@
                 :inputStyle="{ width: '100%' }"
                 showButtons
                 buttonLayout="horizontal"
+                :maxFractionDigits="1" 
               >
                 <template #incrementbuttonicon>
                   <span class="pi pi-plus" />
@@ -60,6 +61,7 @@
                 :inputStyle="{ width: '100%' }"
                 showButtons
                 buttonLayout="horizontal"
+                :maxFractionDigits="1" 
               >
                 <template #incrementbuttonicon>
                   <span class="pi pi-plus" />
@@ -105,7 +107,7 @@
             <span class="font-bold white-space-nowrap">ผัก</span>
           </div>
         </template>
-        <DataTable :value="vegetables" :responsiveLayout="responsiveMode" :scrollable="responsiveMode === 'scroll'">
+        <DataTable :value="vegetables" :responsiveLayout="responsiveMode">
           <Column field="name" header="ชื่อสินค้า">
             <template #body="{ data, field }">
               <span class="font-bold" >{{ data[field] }}</span>
@@ -122,6 +124,7 @@
                 :disabled="disabledAllField"
                 showButtons
                 buttonLayout="horizontal"
+                :maxFractionDigits="1" 
               >
                 <template #incrementbuttonicon>
                   <span class="pi pi-plus" />
@@ -160,6 +163,7 @@
                 :disabled="disabledAllField"
                 showButtons
                 buttonLayout="horizontal"
+                :maxFractionDigits="1" 
               >
                 <template #incrementbuttonicon>
                   <span class="pi pi-plus" />
@@ -250,7 +254,7 @@
       class="btn-size-cancel mr-2"
     />
     <Button
-      v-if="this.statusStock == 'created'"
+     v-if="this.id"
       icon="pi pi-send"
       severity="success"
       @click="sendLine()"
@@ -301,11 +305,13 @@ export default {
       notes:'',
       unit: [],
       responsiveMode: 'stack',
-      statusStock:null
+      statusStock:'created'
     };
   },
   methods: {
   alertMessage: func.alertMessage,
+  show: func.show,
+  close: func.close,
   submitForm() {
       const missingRemainFF = this.freshFoods.filter((p) => p.remain === null);
       const orderRemainFF = this.freshFoods.filter((p) => p.order === null);
@@ -383,15 +389,17 @@ export default {
     },
     getDataId() {
       if (this.id !== undefined) {
+        this.show()
+        this.responsiveMode = 'scroll'
           axios
           .get(`${import.meta.env.VITE_API_URL}/stocks/` + this.id)
           .then((response) => {
             const products = response.data.products;
-            this.responsiveMode = response.data.status;
-            console.log('response.data.status', response.data.status)
-          //   this.responsiveMode = this.statusStock === 'broadcasts' ? 'scroll' :'stack';
-            this.disabledAllField = this.statusStock == 'broadcasts' ? true :  false;
-          console.log(' this.responsiveMode', this.responsiveMode)
+            this.statusStock = response.data.status;
+            // console.log('response.data.status', response.data.status)
+            // this.responsiveMode = this.statusStock === 'broadcasts' ? 'scroll' :'stack';
+            this.disabledAllField = true;
+          // console.log(' this.responsiveMode', this.responsiveMode)
             const freshFoodValue = products.filter(
               (element) => element.category == "FF"
             );
@@ -401,19 +409,24 @@ export default {
             this.notes = response.data.notes || ''
             this.freshFoods = freshFoodValue;
             this.vegetables = vegetableValue;
+            this.close()
           })
           .catch((error) => {
             console.log("error :", error);
             this.alertMessage("ติดต่อผู้ที่ดูแลระบบ", "warning");
           });
 
-      } 
+      }else{   
+        this.getMasterDataCMS();
+      }
     },
     async getUnits() {
+      this.show()
       await axios
         .get(`${import.meta.env.VITE_API_URL}/stocksUnit`)
         .then((response) => {
           this.unit = response.data;
+          this.close()
         })
         .catch((error) => {
           console.log("error :", error);
@@ -421,6 +434,7 @@ export default {
         });
     },
     getMasterDataCMS(){
+      this.show()
         axios.get(`${import.meta.env.VITE_API_URL}/master-products/`)
           .then(response => {
             const products = response.data;
@@ -438,6 +452,7 @@ export default {
               ...element,
               order: parseInt(element.order, 10)
             }));
+            this.close()
           }) .catch(error => {
             console.log("error : ", error);
             this.alertMessage("ติดต่อผู้ที่ดูแลระบบ", "warning");
@@ -471,8 +486,7 @@ export default {
   created() {
     this.getUnits();
     this.getDataId();
-    this.getMasterDataCMS();
-  },
+  }
 };
 </script>
 <style scoped>
@@ -486,11 +500,12 @@ export default {
 ::v-deep .tab-header-center {
   display: flex;
   align-items: center;
-  justify-content: center; /* ✅ จัดให้อยู่กลางแนวนอน */
+  justify-content: center; 
   gap: 0.5rem;
-  width: 100%; /* สำคัญสำหรับการจัดให้กลางเต็มแถบ */
+  width: 100%;
   text-align: center;
 }
+
 </style>
 
   

@@ -73,10 +73,10 @@ body {
   margin-bottom:2rem !important;
 }
 .btn-size-cancel {
-  width:25% !important;
+  width:30% !important;
 }
 .btn-size-accept {
-  width: 25% !important;
+  width: 30% !important;
 }
 
 .swal2-container {
@@ -85,10 +85,10 @@ body {
 
 @media (min-width: 1024px) { /* lg */
   .btn-size-cancel {
-  width:8% !important;
+  width:10% !important;
 }
 .btn-size-accept {
-  width: 8% !important;
+  width: 10% !important;
 }
 }
 /* @media (prefers-color-scheme: dark) {
