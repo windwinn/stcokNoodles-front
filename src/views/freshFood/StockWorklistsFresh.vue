@@ -4,8 +4,13 @@
                   :sortOrder="-1" :globalFilterFields="['create_date','create_by']" paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                   currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
           <template #header>
+            <div class="flex justify-content-between">
+                <div class="flex align-items-center">
+                    <Avatar image="/assets/icon/barbecue.png"/>
+                    <span class="font-bold white-space-nowrap ml-2">ของสด</span>
+                </div>
               <div class="flex justify-content-end">
-                  <div class="mr-3">
+                  <div class="mr-2">
                       <Button @click="newDetails()" class="p-refresh" label="เพิ่ม" severity="danger" icon="pi pi-plus" />
                   </div>
                   <span class="p-input-icon-left">
@@ -13,6 +18,7 @@
                       <InputText v-model="filters['global'].value" placeholder="ค้นหา" />
                   </span>
               </div>
+            </div>
           </template>
           <Column style="width:10px">
               <template #body="slotProps">
@@ -24,7 +30,7 @@
                 {{ formatDate(slotProps.data.create_date) }}
             </template>
           </Column>
-          <Column field="create_by" header="สร้างโดย" ></Column>
+          <!-- <Column field="create_by" header="สร้างโดย" ></Column> -->
           <Column field="status" header="สถานะ" sortable>
             <template #body="slotProps">
                 {{ formatStatus(slotProps.data.status) }}
@@ -37,7 +43,7 @@
 <script>
 import { FilterMatchMode } from 'primevue/api';
 import axios from 'axios'
-import func from "../helpers/func";
+import func from "../../helpers/func";
 
 export default {
 data() {
@@ -65,7 +71,7 @@ data() {
       },
       getWorklistStock(){
         this.show()
-        axios.get(`${import.meta.env.VITE_API_URL}/stocks/`)
+        axios.get(`${import.meta.env.VITE_API_URL}/stocks/FF`)
           .then(response => {
               this.worklistStock = response.data
               this.close()

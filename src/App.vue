@@ -29,14 +29,22 @@ export default {
         //     to: "/",
         // },
         {
-            label: "รายการสั่งของ",
+            label: "รายการสั่งของสด",
             icon: "pi pi-book",
             to: "/",
+            visible: true 
+        },
+        {
+            label: "รายการสั่งผัก",
+            icon: "pi pi-book",
+            to: "/StockWorklistsVetgetable",
+            visible: true 
         },
         {
             label: "จัดการสินค้า",
             icon: "pi pi-folder-open",
             to: "/cmsStock",
+            visible: true 
         },
     ]
     }

@@ -136,7 +136,7 @@
 
 import { FilterMatchMode } from 'primevue/api';
 import axios from 'axios'
-import func from "../helpers/func";
+import func from "../../helpers/func";
 
 export default {
   data() {
