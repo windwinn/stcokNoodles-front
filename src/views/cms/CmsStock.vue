@@ -11,7 +11,7 @@
                 </div>
               <div class="flex justify-content-end">
                   <div class="mr-2">
-                      <Button @click="newDetails()" class="p-refresh" label="เพิ่ม" severity="danger" icon="pi pi-plus" />
+                      <Button @click="openDialog('','new')" class="p-refresh" label="เพิ่ม" severity="danger" icon="pi pi-plus" />
                   </div>
                   <span class="p-input-icon-left">
                       <i class="pi pi-search" />
@@ -225,9 +225,9 @@ export default {
                 visible_item: this.visibleItem
               })
               .then((response) => {
-                this.alertMessage("บันทึกเสร็จสิ้น", "success");
-                this.visibleCMS = false
+                this.cancel()
                 this.getCMSStock()
+                this.alertMessage("บันทึกเสร็จสิ้น", "success");
               })
               .catch((error) => {
                 console.error(
@@ -250,9 +250,9 @@ export default {
                 visible_item: this.visibleItem
               })
               .then((response) => {
-                this.alertMessage("บันทึกเสร็จสิ้น", "success");
-                this.visibleCMS = false
+                this.cancel()
                 this.getCMSStock()
+                this.alertMessage("บันทึกเสร็จสิ้น", "success");
               })
               .catch((error) => {
                 console.error(
