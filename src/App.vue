@@ -41,9 +41,9 @@ export default {
             visible: true 
         },
         {
-            label: "จัดการสินค้า",
+            label: "CMS",
             icon: "pi pi-folder-open",
-            to: "/cmsStock",
+            to: "/cms",
             visible: true 
         },
     ]

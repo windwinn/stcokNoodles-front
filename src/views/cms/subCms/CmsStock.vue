@@ -1,14 +1,9 @@
 <template>
-    <div class="card p-3">
+    <div class="card">
     <DataTable :value="cmsStock" paginator :rows="15" :rowsPerPageOptions="[15,30]" responsiveLayout="scroll" removableSort v-model:filters="filters" 
                   :sortOrder="-1" :globalFilterFields="['name']" paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                   currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
           <template #header>
-            <div class="flex justify-content-between">
-                <div class="flex align-items-center">
-                    <Avatar image="/assets/icon/packages.png"/>
-                    <span class="font-bold white-space-nowrap ml-2">จัดการสินค้า</span>
-                </div>
               <div class="flex justify-content-end">
                   <div class="mr-2">
                       <Button @click="openDialog('','new')" class="p-refresh" label="เพิ่ม" severity="danger" icon="pi pi-plus" />
@@ -18,14 +13,13 @@
                       <InputText v-model="filters['global'].value" placeholder="ค้นหา" />
                   </span>
               </div>
-            </div>
           </template>
             <Column style="width:10px">
                 <template #body="slotProps">
                     <Button @click="openDialog(slotProps.data,'edit')" class="p-button-text p-button-secondary" icon="pi pi-pencil" />
                 </template>
             </Column>
-            <Column field="name" header="ชื่อสินค้า"></Column>
+            <Column field="name" header="ชื่อวัตถุดิบ"></Column>
             <Column field="category" header="ประเภทสินค้า" sortable>
                 <template #body="slotProps">
                     {{ formatCategory(slotProps.data.category) }}
@@ -38,12 +32,12 @@
             </Column>
       </DataTable>
     </div>
-        <Dialog v-model:visible="visibleCMS" modal header="จัดการสินค้า" :style="{ width: '80%' }"
+        <Dialog v-model:visible="visibleCMS" modal header="ระบบจัดการ" :style="{ width: '80%' }"
         :closable="false" :breakpoints="{ '960px': '75vw', '640px': '90vw' }" :baseZIndex="10" >
             <div class="grid">
                 <div class="col-12 lg:col-6">
                     <div class="col-12">
-                        <span class="titleCMS">ชื่อสินค้า</span>
+                        <span class="titleCMS">ชื่อวัตถุดิบ</span>
                     </div>
                     <div class="col-12">
                         <InputText type="text" v-model="nameDialog" style="width: 100%"/>
@@ -51,7 +45,7 @@
                 </div>
                 <div class="col-12 lg:col-6">
                     <div class="col-12">
-                        <span class="titleCMS">ประเภทสินค้า</span>
+                        <span class="titleCMS">ประเภทวัตถุดิบ</span>
                     </div>
                     <div class="col-12">
                         <Dropdown
@@ -96,7 +90,7 @@
                 </div>
                 <div class="col-12 lg:col-6">
                     <div class="col-12">
-                        <span class="titleCMS">แสดงสินค้า</span>
+                        <span class="titleCMS">แสดงบนระบบ</span>
                     </div>
                     <div class="col-12">
                             <div class="flex flex-wrap gap-3">
@@ -111,7 +105,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12 flex flex-row-reverse">
+                <div class="col-12 flex flex-row-reverse mt-2">
                     <Button
                     icon="pi pi-times"
                     severity="danger"
@@ -142,7 +136,7 @@
 
 import { FilterMatchMode } from 'primevue/api';
 import axios from 'axios'
-import func from "../../helpers/func";
+import func from "../../../helpers/func";
 
 export default {
   data() {
@@ -201,7 +195,7 @@ export default {
             // console.log("note"," ")
             // console.log("visible_item",this.visibleItem)
         if(this.nameDialog == null || this.nameDialog == ''){
-            this.alertMessage("กรุณากรอกชื่อสินค้า ","warning");
+            this.alertMessage("กรุณากรอกชื่อวัตถุดิบ ","warning");
         }else if(this.categoryDialog == null || this.categoryDialog == ''){
             this.alertMessage("กรุณาเลือกประเภทสินค้า ","warning");
             return;
@@ -286,7 +280,7 @@ export default {
     async getUnits() {
         this.show()
         await axios
-        .get(`${import.meta.env.VITE_API_URL}/stocksUnit`)
+        .get(`${import.meta.env.VITE_API_URL}/units`)
         .then((response) => {
             this.unit = response.data;
             this.close()

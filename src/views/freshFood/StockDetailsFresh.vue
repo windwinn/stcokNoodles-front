@@ -9,7 +9,7 @@
           </div>
         </template>
         <DataTable :value="freshFoods" :responsiveLayout="responsiveMode">
-          <Column field="name" header="ชื่อสินค้า">
+          <Column field="name" header="ชื่อวัตถุดิบ">
             <template #body="{ data, field }">
               <span class="font-bold" >{{ data[field] }}</span>
             </template>
@@ -293,7 +293,7 @@ export default {
     async getUnits() {
       this.show()
       await axios
-        .get(`${import.meta.env.VITE_API_URL}/stocksUnit`)
+        .get(`${import.meta.env.VITE_API_URL}/units`)
         .then((response) => {
           this.unit = response.data;
           this.close()

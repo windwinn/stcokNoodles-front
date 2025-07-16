@@ -4,7 +4,7 @@ import StockWorklistsFresh from '../views/freshFood/StockWorklistsFresh.vue'
 import StockDetailsFresh from '../views/freshFood/StockDetailsFresh.vue'
 import StockWorklistsVetgetable from '../views/vetgetable/StockWorklistsVetgetable.vue'
 import StockDetailsVetgetable from '../views/vetgetable/StockDetailsVetgetable.vue'
-import cmsStock from '../views/cms/CmsStock.vue'
+import cms from '../views/cms/Cms.vue'
 
 const routes = [
     { path: '/',  name:'StockWorklistsFresh', component: StockWorklistsFresh },
@@ -23,7 +23,7 @@ const routes = [
       component: StockDetailsVetgetable,
       props: true,
     },
-    { path: '/cmsStock', name: 'cmsStock',component: cmsStock },
+    { path: '/cms', name: 'cms',component: cms },
   ]
   
 
