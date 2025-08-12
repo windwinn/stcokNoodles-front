@@ -5,10 +5,109 @@
         <template #header>
           <div class="tab-header-center">
             <Avatar image="/assets/icon/barbecue.png"/>
-            <span class="font-bold white-space-nowrap">ของสด</span>
+            <span class="font-bold white-space-nowrap">ของสด#1</span>
           </div>
         </template>
-        <DataTable :value="freshFoods" :responsiveLayout="responsiveMode">
+        <DataTable :value="freshFoods_1" :responsiveLayout="responsiveMode">
+          <Column field="name" header="ชื่อวัตถุดิบ">
+            <template #body="{ data, field }">
+              <span class="font-bold" >{{ data[field] }}</span>
+            </template>
+          </Column>
+          <Column field="remain" header="คงเหลือ">
+            <template #body="{ data, field }">
+              <span v-if="disabledAllField">{{ data[field] }}</span>
+              <InputNumber
+                v-else
+                v-model="data[field]"
+                :min="0"
+                :style="{ width: '75%' }"
+                showButtons
+                buttonLayout="horizontal"
+                :maxFractionDigits="1" 
+              >
+                <template #incrementbuttonicon>
+                  <span class="pi pi-plus" />
+                </template>
+                <template #decrementbuttonicon>
+                  <span class="pi pi-minus" />
+                </template>
+              </InputNumber>
+            </template>
+          </Column>
+
+          <Column field="remain_unit" header="หน่วย">
+            <template #body="{ data, field }">
+              <span v-if="disabledAllField">{{ data[field] }}</span>
+              <Dropdown
+                v-else
+                v-model="data[field]"
+                :options="unit"
+                optionLabel="name"
+                optionValue="name"
+                placeholder="เลือกหน่วย"
+                style="width: 75%"
+              />
+            </template>
+          </Column>
+
+          <Column field="order" header="สั่งเพิ่ม">
+            <template #body="{ data, field }">
+              <span v-if="disabledAllField">{{ data[field] }}</span>
+              <InputNumber
+                v-else
+                v-model="data[field]"
+                :min="0"
+                :style="{ width: '75%' }"
+                showButtons
+                buttonLayout="horizontal"
+                :maxFractionDigits="1" 
+              >
+                <template #incrementbuttonicon>
+                  <span class="pi pi-plus" />
+                </template>
+                <template #decrementbuttonicon>
+                  <span class="pi pi-minus" />
+                </template>
+              </InputNumber>
+            </template>
+          </Column>
+
+          <Column field="order_unit" header="หน่วย">
+            <template #body="{ data, field }">
+              <span v-if="disabledAllField">{{ data[field] }}</span>
+              <Dropdown
+                v-else
+                v-model="data[field]"
+                :options="unit"
+                optionLabel="name"
+                optionValue="name"
+                placeholder="เลือกหน่วย"
+                style="width: 75%"
+              />
+            </template>
+          </Column>
+
+          <Column field="note" header="หมายเหตุ">
+            <template #body="{ data, field }">
+              <span v-if="disabledAllField">{{ data[field] }}</span>
+              <InputText
+                v-else
+                v-model="data[field]"
+                :style="{ width: '75%' }"
+              />
+            </template>
+          </Column>
+        </DataTable>
+      </TabPanel>
+      <TabPanel>
+        <template #header>
+          <div class="tab-header-center">
+            <Avatar image="/assets/icon/barbecue.png"/>
+            <span class="font-bold white-space-nowrap">ของสด#2</span>
+          </div>
+        </template>
+        <DataTable :value="freshFoods_2" :responsiveLayout="responsiveMode">
           <Column field="name" header="ชื่อวัตถุดิบ">
             <template #body="{ data, field }">
               <span class="font-bold" >{{ data[field] }}</span>
@@ -125,9 +224,13 @@
   <div class="flex mb-2 gap-2 justify-content-end pr-3">
       <Button @click="active = 0" rounded label="ของสด" :outlined="active !== 0">
         <Avatar image="/assets/icon/barbecue.png"/>
-        <span class="pl-2">ของสด</span>
+        <span class="pl-2">ของสด#1</span>
       </Button>
-      <Button @click="active = 1" rounded label="เพิ่มเติม" :outlined="active !== 1" >
+      <Button @click="active = 1" rounded label="ของสด" :outlined="active !== 1">
+        <Avatar image="/assets/icon/barbecue.png"/>
+        <span class="pl-2">ของสด#2</span>
+      </Button>
+      <Button @click="active = 2" rounded label="เพิ่มเติม" :outlined="active !== 2" >
         <Avatar image="/assets/icon/note.png" shape="circle" />
         <span class="pl-2">เพิ่มเติม</span>
       </Button>
@@ -192,7 +295,8 @@ export default {
       active: 0,
       disabledAllField: false,
       products: [],
-      freshFoods: [],
+      freshFoods_1: [],
+      freshFoods_2:[],
       notes:'',
       unit: [],
       responsiveMode: 'stack',
@@ -204,22 +308,40 @@ export default {
   show: func.show,
   close: func.close,
   submitForm() {
-      const missingRemainFF = this.freshFoods.filter((p) => p.remain === null);
-      const orderRemainFF = this.freshFoods.filter((p) => p.order === null);
+      const missingRemainFF_1 = this.freshFoods_1.filter((p) => p.remain === null);
+      const orderRemainFF_1 = this.freshFoods_1.filter((p) => p.order === null);
+      const missingRemainFF_2 = this.freshFoods_2.filter((p) => p.remain === null);
+      const orderRemainFF_2 = this.freshFoods_2.filter((p) => p.order === null);
 
-      if (missingRemainFF.length > 0) {
+      if (missingRemainFF_1.length > 0) {
         this.alertMessage(
-          "กรุณากรอกยอดคงเหลือ : " + missingRemainFF[0].name,
+          "กรุณากรอกยอดคงเหลือ : " + missingRemainFF_1[0].name,
           "warning"
         );
+        this.active = 0
         return;
-      } else if (orderRemainFF.length > 0) {
+      } else if (orderRemainFF_1.length > 0) {
         this.alertMessage(
-          "กรุณากรอกจำนวนที่สั่งเพิ่ม : " + orderRemainFF[0].name,
+          "กรุณากรอกจำนวนที่สั่งเพิ่ม : " + orderRemainFF_1[0].name,
           "warning"
         );
+        this.active = 0
         return;
-      }else if (missingRemainFF.length == [] && orderRemainFF.length == []) {
+      } else if (missingRemainFF_2.length > 0) {
+        this.alertMessage(
+          "กรุณากรอกยอดคงเหลือ : " + missingRemainFF_2[0].name,
+          "warning"
+        );
+        this.active = 1
+        return;
+      } else if (orderRemainFF_2.length > 0) {
+        this.alertMessage(
+          "กรุณากรอกจำนวนที่สั่งเพิ่ม : " + orderRemainFF_2[0].name,
+          "warning"
+        );
+        this.active = 1
+        return;
+      }else if (missingRemainFF_1.length == [] && orderRemainFF_1.length == [] && missingRemainFF_2.length == [] && orderRemainFF_2.length == []) {
         this.$swal({
           icon: "question",
           title: "คุณต้องการบันทึกรายการนี้หรือไม่?",
@@ -229,7 +351,7 @@ export default {
         }).then((result) => {
           if (result.isConfirmed) {
             const createDate = moment().tz('Asia/Bangkok').format(); 
-            this.products = this.freshFoods
+            this.products = this.freshFoods_1.concat(this.freshFoods_2)
             // console.log("create_date",createDate)
             // console.log("create_by",'พี่จ๋อย')
             // console.log("create_by_id",1)
@@ -277,8 +399,13 @@ export default {
             const freshFoodValue = products.filter(
               (element) => element.category == "FF"
             );
+            this.freshFoods_1 = freshFoodValue.filter(
+              (element) => element.type == 1
+            );
+            this.freshFoods_2 = freshFoodValue.filter(
+              (element) => element.type == 2
+            );
             this.notes = response.data.notes || ''
-            this.freshFoods = freshFoodValue;
             this.close()
           })
           .catch((error) => {
@@ -311,7 +438,17 @@ export default {
             const freshFoodValue = products.filter(
               (element) => element.category == "FF"
             );
-            this.freshFoods = freshFoodValue.map(element => ({
+            this.freshFoods_1 = freshFoodValue.filter(
+              (element) => element.type == 1
+            );
+            this.freshFoods_2 = freshFoodValue.filter(
+              (element) => element.type == 2
+            );
+            this.freshFoods_1 = this.freshFoods_1.map(element => ({
+              ...element,
+              order: parseInt(element.order, 10)
+            }));
+            this.freshFoods_2 = this.freshFoods_2.map(element => ({
               ...element,
               order: parseInt(element.order, 10)
             }));
@@ -335,7 +472,6 @@ export default {
             .then((response) => {
               if (response.status == 200) {
                 this.alertMessage("ส่งข้อมูลเรียบร้อย", "success");
-                this.$router.push("/");
               }
             })
             .catch((error) => {

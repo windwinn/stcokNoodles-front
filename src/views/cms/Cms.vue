@@ -12,6 +12,7 @@
         </div>
     </div>
     <div v-else class="card p-3">
+    <!-- <div> -->
         <TabView v-model:activeIndex="active">
             <TabPanel>
                 <template #header>
@@ -20,7 +21,7 @@
                     <span class="font-bold white-space-nowrap">วัตถุดิบ</span>
                 </div>
                 </template>
-                <CmsStock/>
+                <CmsStock ref="step1Ref"/>
             </TabPanel>
             <TabPanel>
                 <template #header>
@@ -29,7 +30,7 @@
                     <span class="font-bold white-space-nowrap">หน่วย</span>
                 </div>
                 </template>
-                <CmsUnit/>
+                <CmsUnit  v-on:callUnitStock="callGetUnitsStock()" />
             </TabPanel>
         </TabView>
     </div>
@@ -45,7 +46,8 @@ export default {
         return {
             visbleCms:true,
             active: 0,
-            nameDialog:''
+            nameDialog:'',
+            testStock:null
         }
     },
     methods: {
@@ -53,6 +55,8 @@ export default {
            if(this.nameDialog == 'pimwin1102'){
             this.visbleCms = false
            }
+        }, callGetUnitsStock(){
+           this.$refs.step1Ref.getUnits()
         }
     }
 }

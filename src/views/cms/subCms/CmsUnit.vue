@@ -1,5 +1,5 @@
 <template>
-    <div class="card p-3">
+    <div class="card">
     <DataTable :value="cmsUnit" paginator :rows="15" :rowsPerPageOptions="[15,30]" responsiveLayout="scroll" removableSort v-model:filters="filters" 
                   :sortOrder="-1" :globalFilterFields="['name']" paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
                   currentPageReportTemplate="Showing {first} to {last} of {totalRecords}">
@@ -75,6 +75,7 @@ import axios from 'axios'
 import func from "../../../helpers/func";
 
 export default {
+  emits: ['callUnitStock'],
   data() {
     return {
         visibleCMS:false,
@@ -139,6 +140,7 @@ export default {
                 this.cancel()
                 this.getCMSUnit()
                 this.alertMessage("บันทึกเสร็จสิ้น", "success");
+                this.$emit('callUnitStock');
               })
               .catch((error) => {
                 console.error(
@@ -158,6 +160,7 @@ export default {
                 this.cancel()
                 this.getCMSUnit()
                 this.alertMessage("บันทึกเสร็จสิ้น", "success");
+                this.$emit('callUnitStock');
               })
               .catch((error) => {
                 console.error(

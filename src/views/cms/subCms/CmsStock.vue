@@ -25,6 +25,11 @@
                     {{ formatCategory(slotProps.data.category) }}
                 </template>
             </Column>
+            <Column field="type" header="ประเภทซัพพลายเออร์" sortable>
+                <template #body="slotProps">
+                    {{ formatType(slotProps.data.type) }}
+                </template>
+            </Column>
             <Column field="visible_item" header="แสดงสินค้า" sortable>
                 <template #body="slotProps">
                     {{ formatVisibleItem(slotProps.data.visible_item) }}
@@ -50,7 +55,7 @@
                     <div class="col-12">
                         <Dropdown
                             v-model="categoryDialog"
-                            :options="productUnit"
+                            :options="categoryUnit"
                             optionLabel="name"
                             optionValue="value"
                             placeholder="เลือกหน่วย"
@@ -83,6 +88,21 @@
                             :options="unit"
                             optionLabel="name"
                             optionValue="name"
+                            placeholder="เลือกหน่วย"
+                            style="width: 100%"
+                        />
+                    </div>
+                </div>
+                <div class="col-12 lg:col-6">
+                    <div class="col-12">
+                        <span class="titleCMS">ประเภทซัพพลายเออร์</span>
+                    </div>
+                    <div class="col-12">
+                        <Dropdown
+                            v-model="typeDialog"
+                            :options="typeUnit"
+                            optionLabel="name"
+                            optionValue="value"
                             placeholder="เลือกหน่วย"
                             style="width: 100%"
                         />
@@ -143,14 +163,16 @@ export default {
     return {
         visibleCMS:false,
         visibleItem:true,
-        typeDialog:null,
+        // jobNo_WPC:null,
+        typePopup:null,
         idDialog:null,
         nameDialog:null,
         categoryDialog:null,
         remainUnitDialog:null,
         orderUnitDialog:null,
+        typeDialog:null,
         unit:[],
-        productUnit:[
+        categoryUnit:[
             {
                 name:'ของสด',
                 value:'FF'
@@ -159,6 +181,17 @@ export default {
                 name:'ผัก',
                 value:'VT'
             }
+        ],
+        typeUnit:[
+            {
+                name:'ร้านแม่',
+                value:1
+            },
+            {
+                name:'พิมสั่งเอง',
+                value:2
+            }
+            
         ],
         cmsStock:[],
         filters: {
@@ -170,30 +203,38 @@ export default {
   methods: {
     formatCategory: func.formatCategory,
     formatVisibleItem: func.formatVisibleItem,
+    formatType: func.formatType,
     alertMessage: func.alertMessage,
     show: func.show,
     close: func.close,
+    doSomething() {
+        console.log('Step1 ทำงานจาก Step2')
+        alert('Step1 ถูกเรียกทำงานแล้ว!')
+},
     openDialog(e,type){
         this.visibleCMS = true
-        this.typeDialog = type
-        if(this.typeDialog == 'edit'){
+        this.typePopup = type
+        if(this.typePopup == 'edit'){
             this.idDialog = e?.id || ''
             this.nameDialog = e?.name || ''
             this.categoryDialog = e?.category || ''
             this.remainUnitDialog = e?.remain_unit
             this.orderUnitDialog = e?.order_unit
+            this.typeDialog = e?.type
             this.visibleItem = e?.visible_item
+            console.log(' this.typeDialog', this.typeDialog)
         }
     },
     updateCMSStock(){
-            // console.log("typeDialog "+this.typeDialog)
-            // console.log("/master-products/"+this.idDialog)
-            // console.log("name",this.nameDialog)
-            // console.log("category",this.categoryDialog)
-            // console.log("remain_unit",this.remainUnitDialog)
-            // console.log("order_unit",this.orderUnitDialog)
-            // console.log("note"," ")
-            // console.log("visible_item",this.visibleItem)
+            console.log("typePopup "+this.typePopup)
+            console.log("/master-products/"+this.idDialog)
+            console.log("name",this.nameDialog)
+            console.log("category",this.categoryDialog)
+            console.log("remain_unit",this.remainUnitDialog)
+            console.log("order_unit",this.orderUnitDialog)
+            console.log("typeDialog",this.typeDialog)
+            console.log("note"," ")
+            console.log("visible_item",this.visibleItem)
         if(this.nameDialog == null || this.nameDialog == ''){
             this.alertMessage("กรุณากรอกชื่อวัตถุดิบ ","warning");
         }else if(this.categoryDialog == null || this.categoryDialog == ''){
@@ -205,7 +246,7 @@ export default {
         }else if(this.orderUnitDialog == null || this.orderUnitDialog == ''){
             this.alertMessage("กรุณาเลือกประเภทหน่วย (สั่งเพิ่ม) ","warning");
             return;
-        }else if(this.typeDialog == 'edit'){
+        }else if(this.typePopup == 'edit'){
             this.show()
             axios
               .put(`${import.meta.env.VITE_API_URL}/master-products/`+this.idDialog, {
@@ -216,6 +257,7 @@ export default {
                 order:"0",
                 order_unit: this.orderUnitDialog,
                 note: "",
+                type:this.typeDialog,
                 visible_item: this.visibleItem
               })
               .then((response) => {
@@ -241,6 +283,7 @@ export default {
                 order: "0",
                 order_unit: this.orderUnitDialog,
                 note: "",
+                type:this.typeDialog,
                 visible_item: this.visibleItem
               })
               .then((response) => {
@@ -289,11 +332,11 @@ export default {
             console.log("error :", error);
             this.alertMessage("ติดต่อผู้ที่ดูแลระบบ", "warning");
         });
-    },
+    }, 
   },created(){
     this.getCMSStock()
     this.getUnits();
-  }
+  },
 }
 </script>
 

@@ -37,6 +37,15 @@ export default {
     }
     return formatValue 
   },
+  formatType(value) {
+    let formatValue = ''
+    if(value == 1){
+      formatValue = 'ร้านแม่'
+    }else{
+      formatValue = 'พิมสั่งเอง'
+    }
+    return formatValue 
+  },
   formatStatus(value) {
     let formatValue = ''
     if(value == 'created'){

@@ -340,7 +340,6 @@ export default {
             .then((response) => {
               if (response.status == 200) {
                 this.alertMessage("ส่งข้อมูลเรียบร้อย", "success");
-                this.$router.push("/StockWorklistsVetgetable");
               }
             })
             .catch((error) => {
